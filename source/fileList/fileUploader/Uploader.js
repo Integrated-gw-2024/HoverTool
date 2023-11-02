@@ -1,4 +1,6 @@
-class Uploader {
+import { Element } from "../../utility/Element";
+
+export class Uploader {
     //ファイルをアップロードする関数
     parentElement;
     inputElementId;

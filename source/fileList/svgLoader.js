@@ -1,4 +1,10 @@
-class SvgLoader {
+import { EventListener } from '../utility/eventListener/eventListener'
+
+/**
+   * svgElementを読み込むクラス。
+   * @param {HTMLInputElement} TargetFile -inputから受け取ったデータを入力(event.target.files[0]);
+   */
+export class SvgLoader {
   rawData;
   url;
   svgElements;
@@ -30,7 +36,11 @@ class SvgLoader {
   }
 }
 
-class SvgButton {
+/**
+   * inputタグを使用可能な状態にします。
+   * @param {HTMLInputElement | string} selector -inputタグを直接渡すか、id名を書いてください。
+   */
+export class SvgButton {
   inputElement;
 
   #svgLoader;
@@ -41,7 +51,6 @@ class SvgButton {
   constructor(selector) {
     this.#eventListener = new EventListener();
 
-    console.log(selector);
     if (typeof selector === 'string') {
       this.inputElement = document.querySelector(selector);
     } else {
@@ -69,6 +78,10 @@ class SvgButton {
     return this.#svgLoader;
   }
 
+  get eventListener() {
+    return this.#eventListener;
+  }
+
   /**
    * svgElementを読み込むクラス。
    * @param {string | svgLoaded} name -現状svgLoaded以外にイベントはありません。
@@ -80,7 +93,12 @@ class SvgButton {
   }
 }
 
-class SvgCircleAnalyzer {
+/**
+   * svgElementsから位置情報や大きさなどを取り出すクラス。
+   * @param {svgElements} svgElements -svgLoaderクラスで取り出したsvgElementsを入れてください。
+   * @param {center | left} svgElements -座標の読み込み基準を決められます。
+   */
+export class SvgCircleAnalyzer {
   svgElements;
   svgCircleElements;
   svgViewBoxSize;

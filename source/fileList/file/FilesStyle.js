@@ -1,4 +1,4 @@
-class FilesStyle {
+export class FilesStyle {
     constructor() {
         // this.tags = Tags;
         //スタイル エレメントを作成

@@ -2,7 +2,19 @@
 //fileはsvgFileとdivの二つで構成されているよ
 //divにはスタイルをつける用のクラスがあるよ
 
-class FileList {
+import { SvgButton } from "./svgLoader";
+import { SvgCircleAnalyzer } from "./svgLoader";
+import { Uploader } from "./fileUploader/Uploader";
+import { Element } from "../utility/Element";
+import { SVGfile } from "./file/SVGFile";
+import { FileDivElements } from "./file/FileDivElements";
+import { FilesStyle } from "./file/FilesStyle";
+import { UploaderStyle } from "./fileUploader/UploaderStyle";
+import { EventListener } from "../utility/eventListener/eventListener";
+
+
+
+export class FileList {
     files = [];
     parentElement;
     fileBox;
@@ -29,7 +41,7 @@ class FileList {
             //ここでfileListにデータを保存する
             let fileName = this.inputButton.svgLoader.rawData.name;
             this.files.push({
-                svgData: new SVGfile(this.analyzer.getArray()),
+                svgData: new SVGfile(this.analyzer.getArray(), fileName),
                 div: new FileDivElements(this.fileBox.getDOMElement(), fileName)
             });
             this.event.dispatch("svgFileAdded", this.files.length);
@@ -40,7 +52,7 @@ class FileList {
         return this.files.length;
     }
     getSvgData(i) {
-        return this.files[i].svgData.getArray();
+        return this.files[i].svgData.data;
     }
 }
 

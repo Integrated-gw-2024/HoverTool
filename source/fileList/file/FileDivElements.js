@@ -1,4 +1,6 @@
-class FileDivElements {
+import { Element } from "../../utility/Element";
+
+export class FileDivElements {
     divElement;
     pElement;
     divStyle;

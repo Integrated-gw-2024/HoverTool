@@ -1,4 +1,6 @@
-class EventListener {
+import { EventRegistry } from "./eventRegistry";
+
+export class EventListener {
   callbacks;
 
   constructor() {

@@ -1,4 +1,4 @@
-class UploaderStyle {
+export class UploaderStyle {
     constructor() {
         this.uploadButton_buttonStyle = document.createElement("style");
         this.uploadButton_buttonStyle_hover = document.createElement("style");

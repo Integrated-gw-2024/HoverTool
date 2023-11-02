@@ -1,4 +1,4 @@
-class EventRegistry {
+export class EventRegistry {
   listener;
   name;
   callback;
