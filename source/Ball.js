@@ -11,10 +11,12 @@ export class Ball {
     acceleration;
     initSpeed;
     //可変なプロパティ
-    waitSpeed;
-    waitGravity;
-    initSpeedRatio;
-    limitSpeed;
+    PARAMS = {
+        waitSpeed: null,
+        waitGravity: null,
+        initSpeedRatio: null,
+        limitSpeed: null,
+    }
 
     constructor(P, PosX, PosY, Radius, Fill, StrokeColor, StrokeWeight) {
         this.p = P;
@@ -31,7 +33,7 @@ export class Ball {
     reset() {
         this.position = this.p.createVector(this.initPosition.x, this.initPosition.y);
         this.velocity = this.p.createVector(0, 0);
-        this.initSpeed = this.p.map(this.initSpeedRatio, 0, 1, 0, this.limitSpeed);
+        this.initSpeed = this.p.map(this.PARAMS.initSpeedRatio, 0, 1, 0, this.PARAMS .limitSpeed);
         this.acceleration = this.p.createVector(
             this.p.random(-this.initSpeed, this.initSpeed),
             this.p.random(-this.initSpeed, this.initSpeed)
@@ -40,14 +42,18 @@ export class Ball {
 
     //可変なプロパティを初期化
     init() {
-        this.waitGravity = 350;
-        this.waitSpeed = 0.017;
-        this.initSpeedRatio = 0.5;//これは0~1までを表していて、limitSpeedをmapしている
-        this.limitSpeed = 0.7;
+        this.PARAMS = {
+            waitGravity: 350,
+            waitSpeed:0.017,
+            initSpeedRatio: 0.5,//これは0~1までを表していて、limitSpeedをmapしている
+            limitSpeed: 0.7,
+        }
     }
 
     //可変なプロパティを設定
-    setPARAMS(){
+    setPARAMS(NewPARAMS) {
+        //値を更新
+        Object.assign(this.PARAMS, NewPARAMS);
     }
 
     update() {
@@ -63,20 +69,20 @@ export class Ball {
 
     randomWait() {
         //初期値と現在地との距離を算出し、それをgravityで細分化した値をratioとしている
-        let ratio = this.p.dist(this.position.x, this.position.y, this.initPosition.x, this.initPosition.y) / this.waitGravity;
+        let ratio = this.p.dist(this.position.x, this.position.y, this.initPosition.x, this.initPosition.y) / this.PARAMS.waitGravity;
         if (this.position.x > this.initPosition.x) {
-            this.acceleration.x += this.p.random(-this.waitSpeed - ratio, this.waitSpeed);
+            this.acceleration.x += this.p.random(-this.PARAMS.waitSpeed - ratio, this.PARAMS.waitSpeed);
         }
         if (this.position.x <= this.initPosition.x) {
-            this.acceleration.x += this.p.random(-this.waitSpeed, this.waitSpeed + ratio);
+            this.acceleration.x += this.p.random(-this.PARAMS.waitSpeed, this.PARAMS.waitSpeed + ratio);
         }
         if (this.position.y > this.initPosition.y) {
-            this.acceleration.y += this.p.random(-this.waitSpeed - ratio, this.waitSpeed);
+            this.acceleration.y += this.p.random(-this.PARAMS.waitSpeed - ratio, this.PARAMS.waitSpeed);
         }
         if (this.position.y <= this.initPosition.y) {
-            this.acceleration.y += this.p.random(-this.waitSpeed, this.waitSpeed + ratio);
+            this.acceleration.y += this.p.random(-this.PARAMS.waitSpeed, this.PARAMS.waitSpeed + ratio);
         }
-        this.acceleration.limit(this.limitSpeed);
+        this.acceleration.limit(this.PARAMS.limitSpeed);
         this.position.x += this.acceleration.x;
         this.position.y += this.acceleration.y;
     }

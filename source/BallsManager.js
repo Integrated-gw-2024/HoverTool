@@ -36,8 +36,10 @@ export class BallsManager {
         }
     }
 
-    setPARAMS(){
-        
+    setPARAMS(NewPARAMS){
+        for (let ball of this.balls) {
+            ball.setPARAMS(NewPARAMS);
+        }
     }
 
     reset(){

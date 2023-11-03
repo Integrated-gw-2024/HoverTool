@@ -26,7 +26,12 @@ export const sketch = (p) => {
             scene = 1;
             
         });
+
         window.addEventListener("keypress", () => {
+            ballsManager.reset();
+        });
+        paneManager.event.add("PARAMSChanged", (PARAMS) => {
+            ballsManager.setPARAMS(PARAMS);
             ballsManager.reset();
         });
     };
