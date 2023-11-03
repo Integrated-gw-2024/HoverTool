@@ -1,10 +1,7 @@
-let fileList;
-let scene;
-let ballsManager;
-
 import { CanvasManager } from "./CanvasManager";
 import { FileList } from "./fileList/FileList";
 import { BallsManager } from "./BallsManager";
+import { PaneManager } from "./PaneManager";
 
 
 export const sketch = (p) => {
@@ -12,12 +9,14 @@ export const sketch = (p) => {
     let fileList;
     let ballsManager;
     let scene;
+    let paneManager;
 
     p.setup = () => {
         scene = 0;
         canvasManager = new CanvasManager(p);
         canvasManager.createCanvas(300,300);
         fileList = new FileList("fileList");
+        paneManager = new PaneManager();
         fileList.event.add("svgFileAdded", () => {
             console.log(fileList.getSvgData(0));
             ballsManager = new BallsManager(p, fileList.getSvgData(0));

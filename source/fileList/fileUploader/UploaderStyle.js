@@ -13,7 +13,7 @@ export class UploaderStyle {
         this.uploadButton_buttonStyle.sheet.insertRule(`
         #uploader_buttonElement {
         margin:5px;
-        width: 200px;
+        width: 300px;
         height: 30px;
         background-color: 
         #FFFFFF;

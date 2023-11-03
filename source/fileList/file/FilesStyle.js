@@ -11,7 +11,7 @@ export class FilesStyle {
         this.div_divStyle.sheet.insertRule(`
         .file_divElement {
                     margin:5px;
-                    width: 200px;
+                    width: 300px;
                     height: 30px;
                     background-color: 
                     #555555;border-radius: 

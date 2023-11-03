@@ -42,8 +42,12 @@ export class Ball {
     init() {
         this.waitGravity = 350;
         this.waitSpeed = 0.017;
-        this.initSpeedRatio = 0;//これは0~1までを表していて、limitSpeedをmapしている
+        this.initSpeedRatio = 0.5;//これは0~1までを表していて、limitSpeedをmapしている
         this.limitSpeed = 0.7;
+    }
+
+    //可変なプロパティを設定
+    setPARAMS(){
     }
 
     update() {
