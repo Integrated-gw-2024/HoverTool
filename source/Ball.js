@@ -12,13 +12,14 @@ export class Ball{
     //可変なプロパティ
     waitSpeed;
     waitGravity;
+    initSpeed;
+    limitSpeed;
 
     constructor(P, PosX, PosY, Radius, Fill, StrokeColor, StrokeWeight){
         this.p = P;
         this.initPosition = this.p.createVector(PosX, PosY);
         this.radius = Radius * 2;
         this.fill = Fill;
-        console.log(this.fill);
         this.strokeColor = StrokeColor;
         this.strokeWeight = StrokeWeight;
         this.init();
@@ -29,17 +30,21 @@ export class Ball{
     reset(){
         this.position = this.p.createVector(this.initPosition.x,this.initPosition.y);
         this.velocity = this.p.createVector(0,0);
-        this.acceleration = this.p.createVector(0,0);
+        this.acceleration = this.p.createVector(
+            this.p.random(-this.initSpeed, this.initSpeed),
+            this.p.random(-this.initSpeed, this.initSpeed)
+            );
     }
 
     //可変なプロパティを初期化
     init(){
         this.waitGravity = 350;
         this.waitSpeed = 0.017;
+        this.initSpeed = 0.3;
+        this.limitSpeed = 0.7;
     }
 
     update(){
-        console.log(0);
         this.randomWait();
     }
 
@@ -65,7 +70,7 @@ export class Ball{
         if (this.position.y <= this.initPosition.y) {
             this.acceleration.y += this.p.random(-this.waitSpeed, this.waitSpeed + ratio);
         }
-        this.acceleration.limit(0.7);
+        this.acceleration.limit(this.limitSpeed);
         this.position.x += this.acceleration.x;
         this.position.y += this.acceleration.y;
     }

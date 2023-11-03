@@ -27,6 +27,9 @@ export const sketch = (p) => {
             scene = 1;
             
         });
+        window.addEventListener("keypress", () => {
+            ballsManager.reset();
+        });
     };
 
     p.draw = () => {
@@ -42,34 +45,3 @@ export const sketch = (p) => {
     }
 };
 
-
-// const sketch = (p) => {
-//     p.setup() = () => {
-//         p.createCanvas(100, 100);
-//         p.background(255, 0, 0);
-
-//         fileList = new FileList("fileList");
-//         fileList.event.add("svgFileAdded", () => {
-//             ballsManager = new BallsManager(fileList.getSvgData(0));
-//             console.log(fileList.getSvgData(0));
-//             console.log("sceneを1へ進める");
-//             scene = 1;
-//             //キャンパスサイズをリサイズする
-//             resizeCanvas(fileList.analyzer.svgViewSize.width, fileList.analyzer.svgViewSize.height);
-//         });
-//     }
-
-
-//     p.draw() = () => {
-//         p.background(255);
-//         if (scene == 1) {
-//             scene1();
-//         }
-//         console.log(awa);
-//     }
-
-//     function scene1() = () => {
-//         ballsManager.update();
-//         ballsManager.display();
-//     }
-// };

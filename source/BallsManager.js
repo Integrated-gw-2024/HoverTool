@@ -40,4 +40,10 @@ export class BallsManager {
         
     }
 
+    reset(){
+        for (let ball of this.balls) {
+            ball.reset();
+        }
+    }
+
 }
