@@ -10,37 +10,54 @@ export class PaneManager {
         this.event = new EventListener();
         this.event.add("PARAMSChanged");
         this.event.add("encodeButtonPressed");
+        this.event.add("timelinePARAMSChanged", (ev) => {
+            console.log(ev);
+        });
 
         this.pane = new Pane();
+
+        //パラメーターの設定
         this.PARAMS = {
-            Gravity: 350,
-            InitSpeedRatio: 0.5,
-            Speed: 0.017,
-            LimitSpeed: 0.7,
+            waitGravity: 350,
+            initSpeedRatio: 0.5,
+            waitSpeed: 0.017,
+            limitSpeed: 0.7,
         };
+        this.timelinePARAMS = {
+            startFrame: 0,
+            endFrame: 100,
+        };
+
+        //フォルダを登録
         this.PARAMSFolder = this.pane.addFolder({
-            title: 'パラメーター',
+            title: 'パラメーター設定',
         });
         this.buttonFolder = this.pane.addFolder({
-            title: 'ボタン',
+            title: '書き出し設定',
         });
+
         this.addPARAMSBindings();
         this.addButtonBindings();
     }
+
     addPARAMSBindings() {
-        this.PARAMSFolder.addBinding(this.PARAMS, 'Gravity', {
+        this.PARAMSFolder.addBinding(this.PARAMS, 'waitGravity', {
+            label: '重力',
             min: 100,
             max: 500,
         });
-        this.PARAMSFolder.addBinding(this.PARAMS, 'Speed', {
+        this.PARAMSFolder.addBinding(this.PARAMS, 'waitSpeed', {
+            label: '速度',
             min: 0,
             max: 0.1,
         });
-        this.PARAMSFolder.addBinding(this.PARAMS, 'LimitSpeed', {
+        this.PARAMSFolder.addBinding(this.PARAMS, 'limitSpeed', {
+            label: '制限速度',
             min: 0,
             max: 5,
         });
-        this.PARAMSFolder.addBinding(this.PARAMS, 'InitSpeedRatio', {
+        this.PARAMSFolder.addBinding(this.PARAMS, 'initSpeedRatio', {
+            label: '初速度の比率',
             step: 0.1,
             min: 0,
             max: 1,
@@ -58,9 +75,31 @@ export class PaneManager {
             title: 'スタート',
             label: 'エンコード',
         });
+        this.buttonFolder.addBinding(this.timelinePARAMS, 'startFrame',{
+            label: '開始フレーム',
+            step: 1,
+            min: 0,
+        });
+        this.buttonFolder.addBinding(this.timelinePARAMS, 'endFrame',{
+            label: '終了フレーム',
+            step: 1,
+            min: 1,
+        });
+
         this.encodeButton.on('click', () => {
             console.log("エンコードボタンが押された");
             this.event.dispatch("encodeButtonPressed");
+        });
+        this.buttonFolder.on('change', (ev) => {
+            if (ev.last) {
+                console.log("timelinePaneが操作された");
+                //startFrameがendFrameを超えてしまった場合、値をリフレッシュする
+                if(this.timelinePARAMS.startFrame >= this.timelinePARAMS.endFrame){
+                    this.timelinePARAMS.startFrame = this.timelinePARAMS.endFrame -1;
+                    this.buttonFolder.refresh();
+                }
+                this.event.dispatch("timelinePARAMSChanged", this.timelinePARAMS);
+            }
         });
     }
 }
