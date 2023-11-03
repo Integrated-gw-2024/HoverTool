@@ -1,4 +1,4 @@
-export class Ball{
+export class Ball {
     //静的なプロパティ
     initPosition;
     radius;
@@ -9,13 +9,14 @@ export class Ball{
     position;
     velocity;
     acceleration;
+    initSpeed;
     //可変なプロパティ
     waitSpeed;
     waitGravity;
-    initSpeed;
+    initSpeedRatio;
     limitSpeed;
 
-    constructor(P, PosX, PosY, Radius, Fill, StrokeColor, StrokeWeight){
+    constructor(P, PosX, PosY, Radius, Fill, StrokeColor, StrokeWeight) {
         this.p = P;
         this.initPosition = this.p.createVector(PosX, PosY);
         this.radius = Radius * 2;
@@ -27,35 +28,36 @@ export class Ball{
     }
 
     //変動するプロパティを初期化
-    reset(){
-        this.position = this.p.createVector(this.initPosition.x,this.initPosition.y);
-        this.velocity = this.p.createVector(0,0);
+    reset() {
+        this.position = this.p.createVector(this.initPosition.x, this.initPosition.y);
+        this.velocity = this.p.createVector(0, 0);
+        this.initSpeed = this.p.map(this.initSpeedRatio, 0, 1, 0, this.limitSpeed);
         this.acceleration = this.p.createVector(
             this.p.random(-this.initSpeed, this.initSpeed),
             this.p.random(-this.initSpeed, this.initSpeed)
-            );
+        );
     }
 
     //可変なプロパティを初期化
-    init(){
+    init() {
         this.waitGravity = 350;
         this.waitSpeed = 0.017;
-        this.initSpeed = 0.3;
+        this.initSpeedRatio = 0;//これは0~1までを表していて、limitSpeedをmapしている
         this.limitSpeed = 0.7;
     }
 
-    update(){
+    update() {
         this.randomWait();
     }
 
-    display(){
+    display() {
         this.p.fill(this.fill);
         this.p.strokeWeight(this.strokeWeight);
         this.p.stroke(this.strokeColor);
         this.p.circle(this.position.x, this.position.y, this.radius);
     }
 
-    randomWait(){
+    randomWait() {
         //初期値と現在地との距離を算出し、それをgravityで細分化した値をratioとしている
         let ratio = this.p.dist(this.position.x, this.position.y, this.initPosition.x, this.initPosition.y) / this.waitGravity;
         if (this.position.x > this.initPosition.x) {
