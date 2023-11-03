@@ -32,7 +32,7 @@ export class FileList {
 
         //wrapperを作る
         this.fileBox = new Element(this.parentElement, "id", "fileBox", "div");
-        this.uploadButtonBox = new Element(this.parentElement, "id", "uploadButtonBox", "div");
+        this.uploadButtonBox = new Element(this.fileBox.getDOMElement(), "id", "uploadButtonBox", "div");
         this.uploader = new Uploader("uploadButtonBox", "uploader");//inputElementを作成する
         this.inputButton = new SvgButton("#uploader_inputElement");//inputElementのイベントリスナーを生成
 
@@ -46,6 +46,22 @@ export class FileList {
             });
             this.event.dispatch("svgFileAdded", this.files.length);
         });
+
+        this.setStyle();
+    }
+
+    setStyle() {
+        //スタイル エレメントを作成
+        this.fileBoxStyles = document.createElement("style");
+        //スタイルをヘッダに入れる
+        document.head.appendChild(this.fileBoxStyles);
+        this.fileBoxStyles.sheet.insertRule(`
+        #fileBox {
+            width: auto;
+            height: auto;
+            position: fixed;
+            right: 0px;
+                }`, 0);
     }
 
     getFilesLength() {

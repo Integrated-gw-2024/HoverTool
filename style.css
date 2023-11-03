@@ -14,7 +14,7 @@
 
 .tp-rotv{
   position: fixed;
-  left: 5px;
+  right: 5px;
   top: 100px;
   width: 300px;
 }
