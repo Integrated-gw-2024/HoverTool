@@ -12,6 +12,8 @@ export const sketch = (p) => {
     let scene;
     let paneManager;
     let frameCount = 0;
+    let clockDate = new Date()
+    let captureStartSwitch = false;//trueにして1フレームの間でstartRecordする
 
     p.setup = () => {
         scene = 0;
@@ -30,10 +32,10 @@ export const sketch = (p) => {
             scene = 1;
         });
 
-        // Initialize and pass in canvas.
+        //canvasCaptureの初期設定
         CanvasCapture.init(
             document.getElementById('defaultCanvas0'),
-            { showRecDot: true }, // Options are optional, more info below.
+            { showRecDot: false }, // Options are optional, more info below.
         );
 
         window.addEventListener("keypress", (event) => {
@@ -44,6 +46,8 @@ export const sketch = (p) => {
                 }
             }
         });
+
+        //paneManagerのeventListenerの設定
         paneManager.event.add("PARAMSChanged", (PARAMS) => {
             ballsManager.setPARAMS(PARAMS);
             ballsManager.reset();
@@ -51,14 +55,12 @@ export const sketch = (p) => {
         });
         paneManager.event.add("encodeButtonPressed", () => {
             frameCount = 0;
-            CanvasCapture.beginPNGFramesRecord({
-                onExportProgress: (progress) => {
-                    console.log(progress);
-                },
-                fps: 60,
-                name: 'pngFrames',
-            })
-            scene = 2;
+            ballsManager.reset();
+            if (scene == 1) {
+                console.log(paneManager.timelinePARAMS.encodeFormat);
+                captureStartSwitch = true;
+                scene = 2;
+            }
         });
     };
 
@@ -66,10 +68,10 @@ export const sketch = (p) => {
         if (scene == 0) {
             scene0();
         }
-        if (scene == 1) {
+        else if (scene == 1) {
             scene1();
         }
-        if (scene == 2) {
+        else if (scene == 2) {
             scene2();
         }
     };
@@ -78,6 +80,7 @@ export const sketch = (p) => {
         p.background(220);
     }
 
+    //プレビュー画面
     function scene1() {
         p.background(220);
         ballsManager.update();
@@ -87,19 +90,46 @@ export const sketch = (p) => {
         p.textSize(30);
         p.text("現在のフレーム: " + frameCount, 0, 30);
         frameCount++;
+        console.log(paneManager.timelinePARAMS.endFrame);
     }
 
+    //書き出し画面
     function scene2() {
+        if(captureStartSwitch == true){
+            startRecord();
+            console.log("ok");
+            captureStartSwitch = false;
+        }
         p.clear();
         ballsManager.update();
         ballsManager.display();
-        if (frameCount == 50) {
+        if (CanvasCapture.isRecording()) {
+            CanvasCapture.recordFrame();
+        }
+        if (frameCount > paneManager.timelinePARAMS.endFrame) {
             CanvasCapture.stopRecord();
             scene = 1;
         }
         frameCount++;
-        if (CanvasCapture.isRecording()) {
-            CanvasCapture.recordFrame();
+    }
+
+    function startRecord(){
+        if (paneManager.timelinePARAMS.encodeFormat == "png") {
+            CanvasCapture.beginPNGFramesRecord({
+                onExportProgress: (progress) => {
+                    console.log(progress);
+                },
+                fps: 60,
+                quality: 1,
+                name: `${clockDate.getMonth() + 1}-${clockDate.getDate()}_${clockDate.getHours()}-${clockDate.getMinutes()}_pngFrames`,
+            });
+        }
+        else if (paneManager.timelinePARAMS.encodeFormat == "gif") {
+            CanvasCapture.beginGIFRecord({
+                name: `${clockDate.getMonth() + 1}-${clockDate.getDate()}_${clockDate.getHours()}-${clockDate.getMinutes()}_gifFrames`,
+                fps: 60,
+                quality: 1,
+            });
         }
     }
 

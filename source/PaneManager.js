@@ -24,6 +24,7 @@ export class PaneManager {
             limitSpeed: 0.7,
         };
         this.timelinePARAMS = {
+            encodeFormat: "png",
             startFrame: 0,
             endFrame: 100,
         };
@@ -71,9 +72,12 @@ export class PaneManager {
     }
 
     addButtonBindings() {
-        this.encodeButton = this.buttonFolder.addButton({
-            title: 'スタート',
-            label: 'エンコード',
+        this.buttonFolder.addBinding(this.timelinePARAMS, 'encodeFormat',{
+            label: 'フォーマット',
+            options: {
+                png: "png",
+                gif: "gif",
+            }
         });
         this.buttonFolder.addBinding(this.timelinePARAMS, 'startFrame',{
             label: '開始フレーム',
@@ -84,6 +88,10 @@ export class PaneManager {
             label: '終了フレーム',
             step: 1,
             min: 1,
+        });
+        this.encodeButton = this.buttonFolder.addButton({
+            title: 'スタート',
+            label: 'エンコード',
         });
 
         this.encodeButton.on('click', () => {
