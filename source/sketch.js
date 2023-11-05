@@ -23,6 +23,7 @@ export const sketch = (p) => {
         fileList = new FileList("fileList");
         paneManager = new PaneManager();
         fileList.event.add("svgFileAdded", () => {
+            fileList.removeUploader();
             paneManager.addMonitorBindings();
             paneManager.addPARAMSBindings();
             paneManager.addButtonBindings();

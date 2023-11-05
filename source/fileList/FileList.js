@@ -70,5 +70,10 @@ export class FileList {
     getSvgData(i) {
         return this.files[i].svgData.data;
     }
+
+    removeUploader(){
+        this.uploadButtonBox.getDOMElement().remove();
+        this.uploader.remove();
+    }
 }
 

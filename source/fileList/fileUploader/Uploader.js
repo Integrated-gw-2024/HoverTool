@@ -24,6 +24,12 @@ export class Uploader {
         });
     }
 
+    remove(){
+        this.pElement.getDOMElement().remove();
+        this.inputElement.getDOMElement().remove();
+        this.buttonElement.getDOMElement().remove();
+    }
+
     getDOMElement(TargetElement){
         if(TargetElement == "button"){return this.buttonElement.getDOMElement();}
         else if(TargetElement == "input"){return this.inputElement.getDOMElement();}
