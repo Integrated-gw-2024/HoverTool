@@ -13,7 +13,6 @@ export const sketch = (p) => {
     let paneManager;
     let frameCount = 0;
     let clockDate = new Date()
-    let captureStartSwitch = false;//trueにして1フレームの間でstartRecordする
 
     p.setup = () => {
         scene = 0;
@@ -60,7 +59,6 @@ export const sketch = (p) => {
             ballsManager.reset();
             if (scene == 1) {
                 console.log(paneManager.timelinePARAMS.encodeFormat);
-                captureStartSwitch = true;
                 scene = 2;
             }
         });
@@ -93,9 +91,8 @@ export const sketch = (p) => {
 
     //書き出し画面
     function scene2() {
-        if (captureStartSwitch == true) {
+        if (frameCount == paneManager.timelinePARAMS.startFrame) {
             startRecord();
-            captureStartSwitch = false;
         }
         if (paneManager.timelinePARAMS.encodeFormat == "png") {
             p.clear();
@@ -103,11 +100,11 @@ export const sketch = (p) => {
         else if (paneManager.timelinePARAMS.encodeFormat == "gif") {
             p.background(0, 255, 0);
         }
-        ballsManager.update();
         ballsManager.display();
         if (CanvasCapture.isRecording()) {
             CanvasCapture.recordFrame();
         }
+        ballsManager.update();
         if (frameCount > paneManager.timelinePARAMS.endFrame) {
             CanvasCapture.stopRecord();
             scene = 1;
