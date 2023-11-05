@@ -24,7 +24,9 @@ export const sketch = (p) => {
         fileList = new FileList("fileList");
         paneManager = new PaneManager();
         fileList.event.add("svgFileAdded", () => {
-            console.log(fileList.getSvgData(0));
+            paneManager.addMonitorBindings();
+            paneManager.addPARAMSBindings();
+            paneManager.addButtonBindings();
             ballsManager = new BallsManager(p, fileList.getSvgData(0));
             //キャンバスの大きさを変える
             canvasManager.resizeCanvas(fileList.analyzer.svgViewSize.width, fileList.analyzer.svgViewSize.height);
@@ -82,25 +84,25 @@ export const sketch = (p) => {
 
     //プレビュー画面
     function scene1() {
+        paneManager.setMonitorPARAMS(frameCount);
         p.background(220);
         ballsManager.update();
         ballsManager.display();
-        p.noStroke();
-        p.fill(0);
-        p.textSize(30);
-        p.text("現在のフレーム: " + frameCount, 0, 30);
         frameCount++;
-        console.log(paneManager.timelinePARAMS.endFrame);
     }
 
     //書き出し画面
     function scene2() {
-        if(captureStartSwitch == true){
+        if (captureStartSwitch == true) {
             startRecord();
-            console.log("ok");
             captureStartSwitch = false;
         }
-        p.clear();
+        if (paneManager.timelinePARAMS.encodeFormat == "png") {
+            p.clear();
+        }
+        else if (paneManager.timelinePARAMS.encodeFormat == "gif") {
+            p.background(0, 255, 0);
+        }
         ballsManager.update();
         ballsManager.display();
         if (CanvasCapture.isRecording()) {
@@ -113,7 +115,7 @@ export const sketch = (p) => {
         frameCount++;
     }
 
-    function startRecord(){
+    function startRecord() {
         if (paneManager.timelinePARAMS.encodeFormat == "png") {
             CanvasCapture.beginPNGFramesRecord({
                 onExportProgress: (progress) => {
@@ -126,6 +128,9 @@ export const sketch = (p) => {
         }
         else if (paneManager.timelinePARAMS.encodeFormat == "gif") {
             CanvasCapture.beginGIFRecord({
+                onExportProgress: (progress) => {
+                    console.log(progress);
+                },
                 name: `${clockDate.getMonth() + 1}-${clockDate.getDate()}_${clockDate.getHours()}-${clockDate.getMinutes()}_gifFrames`,
                 fps: 60,
                 quality: 1,

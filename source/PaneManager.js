@@ -17,6 +17,9 @@ export class PaneManager {
         this.pane = new Pane();
 
         //パラメーターの設定
+        this.monitorPARAMS = {
+            nowFrame: "0",
+        }
         this.PARAMS = {
             waitGravity: 350,
             initSpeedRatio: 0.5,
@@ -30,15 +33,27 @@ export class PaneManager {
         };
 
         //フォルダを登録
+        this.monitorFolder = this.pane.addFolder({
+            title: 'モニター'
+        })
         this.PARAMSFolder = this.pane.addFolder({
             title: 'パラメーター設定',
         });
         this.buttonFolder = this.pane.addFolder({
             title: '書き出し設定',
         });
+    }
 
-        this.addPARAMSBindings();
-        this.addButtonBindings();
+    addMonitorBindings(){
+        this.monitorFolder.addBinding(this.monitorPARAMS, 'nowFrame', {
+            label: '現在のフレーム',
+            readonly: true,
+        });
+    }
+
+    setMonitorPARAMS(newFrame){
+        this.monitorPARAMS.nowFrame = newFrame;
+        this.monitorFolder.refresh();
     }
 
     addPARAMSBindings() {
