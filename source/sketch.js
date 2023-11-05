@@ -13,8 +13,13 @@ export const sketch = (p) => {
     let paneManager;
     let frameCount = 0;
     let clockDate = new Date()
+    let progressWrapperElement;
+    let progressBarElement;
+    let renderingProgress;
 
     p.setup = () => {
+        progressWrapperElement = document.querySelector("#progressWrapper");
+        progressBarElement = document.querySelector("#progressBar");
         scene = 0;
 
         canvasManager = new CanvasManager(p);
@@ -45,6 +50,7 @@ export const sketch = (p) => {
                 if (event.key === " ") {
                     ballsManager.reset();
                     frameCount = 0;
+                    renderingProgress = 0;
                 }
             }
         });
@@ -56,9 +62,9 @@ export const sketch = (p) => {
             frameCount = 0;
         });
         paneManager.event.add("encodeButtonPressed", () => {
-            frameCount = 0;
-            ballsManager.reset();
             if (scene == 1) {
+                frameCount = 0;
+                ballsManager.reset();
                 console.log(paneManager.timelinePARAMS.encodeFormat);
                 scene = 2;
             }
@@ -78,13 +84,13 @@ export const sketch = (p) => {
     };
 
     function scene0() {
-        p.background(220);
+        p.background(219);
     }
 
     //プレビュー画面
     function scene1() {
         paneManager.setMonitorPARAMS(frameCount);
-        p.background(230);
+        p.background(250);
         ballsManager.update();
         ballsManager.display();
         frameCount++;
@@ -92,6 +98,10 @@ export const sketch = (p) => {
 
     //書き出し画面
     function scene2() {
+        renderingProgress = p.map(frameCount,paneManager.timelinePARAMS.startFrame,paneManager.timelinePARAMS.endFrame,0,1);
+        progressBarElement.style.width = `${p.map(renderingProgress, 0,1, 0,125)}px`;
+
+        paneManager.setMonitorPARAMS(frameCount);
         if (frameCount == paneManager.timelinePARAMS.startFrame) {
             startRecord();
         }
@@ -106,7 +116,7 @@ export const sketch = (p) => {
             CanvasCapture.recordFrame();
         }
         ballsManager.update();
-        if (frameCount > paneManager.timelinePARAMS.endFrame) {
+        if (frameCount >= paneManager.timelinePARAMS.endFrame) {
             CanvasCapture.stopRecord();
             scene = 1;
         }
@@ -117,7 +127,11 @@ export const sketch = (p) => {
         if (paneManager.timelinePARAMS.encodeFormat == "png") {
             CanvasCapture.beginPNGFramesRecord({
                 onExportProgress: (progress) => {
-                    console.log(progress);
+                    progressBarElement.style.width = `${p.map(progress, 0,1, 125, 250)}px`;
+                },
+                onExportFinish: () => {
+                    progressWrapperElement.style.display = "none";
+                    progressBarElement.style.width = "0px";
                 },
                 fps: 60,
                 quality: 1,
@@ -127,13 +141,18 @@ export const sketch = (p) => {
         else if (paneManager.timelinePARAMS.encodeFormat == "gif") {
             CanvasCapture.beginGIFRecord({
                 onExportProgress: (progress) => {
-                    console.log(progress);
+                    progressBarElement.style.width = `${p.map(progress, 0,1, 125, 250)}px`;
+                },
+                onExportFinish: () => {
+                    progressWrapperElement.style.display = "none";
+                    progressBarElement.style.width = "0px";
                 },
                 name: `${clockDate.getMonth() + 1}-${clockDate.getDate()}_${clockDate.getHours()}-${clockDate.getMinutes()}_gifFrames`,
                 fps: 60,
                 quality: 1,
             });
         }
+        progressWrapperElement.style.display = "flex";
     }
 
 

@@ -25,6 +25,7 @@ export class Ball {
         this.fill = Fill;
         this.strokeColor = StrokeColor;
         this.strokeWeight = StrokeWeight;
+        console.log(this.fill);
         this.init();
         this.reset();
     }

@@ -106,7 +106,7 @@ export class PaneManager {
         });
         this.encodeButton = this.buttonFolder.addButton({
             title: 'スタート',
-            label: 'エンコード',
+            label: 'レンダリング',
         });
 
         this.encodeButton.on('click', () => {

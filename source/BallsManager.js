@@ -22,6 +22,7 @@ export class BallsManager {
             let strokeWeight = this.svgArray[i].strokeWeight;
             this.balls.push(new Ball(this.p, position.x, position.y, radius, fill, strokeColor, strokeWeight));
         }
+        console.log(this.balls[0].fill);
     }
 
     update() {
