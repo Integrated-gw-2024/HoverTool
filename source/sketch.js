@@ -84,7 +84,7 @@ export const sketch = (p) => {
     //プレビュー画面
     function scene1() {
         paneManager.setMonitorPARAMS(frameCount);
-        p.background(220);
+        p.background(230);
         ballsManager.update();
         ballsManager.display();
         frameCount++;

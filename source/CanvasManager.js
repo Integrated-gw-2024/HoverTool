@@ -9,9 +9,9 @@ export class CanvasManager {
     constructor(P5) {
         this.p = P5;
         this.canvas = document.getElementById('defaultCanvas0');
-        this.panelsWidth = 320;
+        this.panelsWidth = 380;
         this.widthLimit = window.innerWidth - this.panelsWidth;
-        this.heightLimit = window.innerHeight- 20;
+        this.heightLimit = window.innerHeight- 40;
     }
 
     resizeCanvas(Width, Height) {
