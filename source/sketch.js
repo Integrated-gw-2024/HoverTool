@@ -18,7 +18,7 @@ export const sketch = (p) => {
         scene = 0;
 
         canvasManager = new CanvasManager(p);
-        canvasManager.createCanvas(300, 300);
+        canvasManager.createCanvas(1920, 1080);
 
         fileList = new FileList("fileList");
         paneManager = new PaneManager();

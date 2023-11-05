@@ -31,9 +31,18 @@ export class CanvasManager {
     createCanvas(Width, Height) {
         this.aspectRatio = Width / Height;
         console.log(this.aspectDetector(Width, Height))
-        this.p.createCanvas(Width, Height);
-        this.canvas.style.width = '100px';
-        this.canvas.style.height = '100px';
+        let canvas = this.p.createCanvas(Width, Height);
+        canvas.parent('canvasWrapper');
+        if (this.aspectDetector(Width, Height) == "alignWidth") {
+            let widthRatio = this.widthLimit / Width;
+            this.canvas.style.width = `${Width * widthRatio}px`;
+            this.canvas.style.height = `${Height * widthRatio}px`;
+        }
+        else if (this.aspectDetector(Width, Height) == "alignHeight") {
+            let heightRatio = this.heightLimit / Height;
+            this.canvas.style.width = `${Width * heightRatio}px`;
+            this.canvas.style.height = `${Height * heightRatio}px`;
+        }
     }
 
     aspectDetector(Width, Height) {
